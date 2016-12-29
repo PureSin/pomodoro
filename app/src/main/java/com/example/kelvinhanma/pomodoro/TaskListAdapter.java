@@ -51,7 +51,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     }
 
     public void swapCursor(Cursor cursor) {
+        if (mCursor != null) mCursor.close();
         mCursor = cursor;
+        if (cursor != null) {
+            this.notifyDataSetChanged();
+        }
     }
 
     class TaskViewHolder extends RecyclerView.ViewHolder {

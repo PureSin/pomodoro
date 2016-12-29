@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.kelvinhanma.pomodoro.data.PomoDbHelper;
@@ -25,6 +27,7 @@ public class TasksActivityFragment extends Fragment {
     private TaskListAdapter mAdapter;
     private SQLiteDatabase mDb;
     private EditText mTaskNameEditText;
+    private Button mAddButton;
 
     public TasksActivityFragment() {
     }
@@ -36,7 +39,21 @@ public class TasksActivityFragment extends Fragment {
         Activity activity = getActivity();
 
         mTaskNameEditText = (EditText) rootView.findViewById(R.id.task_edit_text);
-        mTaskNameEditText.setOnClickListener(new View.OnClickListener() {
+        mTaskNameEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                        handleAddTaskClick(view);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+        mAddButton = (Button) rootView.findViewById(R.id.add_task_button);
+        mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handleAddTaskClick(view);
