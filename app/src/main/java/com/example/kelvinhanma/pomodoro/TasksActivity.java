@@ -19,26 +19,12 @@ import com.example.kelvinhanma.pomodoro.data.TaskListContract;
 
 public class TasksActivity extends AppCompatActivity {
 
-    private TaskListAdapter mAdapter;
-    private SQLiteDatabase mDb;
     private final static String LOG_TAG = TasksActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasks);
-
-        RecyclerView taskListRecyclerView;
-        taskListRecyclerView = (RecyclerView) this.findViewById(R.id.content_tasks);
-        taskListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        PomoDbHelper dbHelper = new PomoDbHelper(this);
-        mDb = dbHelper.getWritableDatabase();
-
-        Cursor cursor = getAllTasks();
-        mAdapter = new TaskListAdapter(this, cursor);
-
-        taskListRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -60,17 +46,5 @@ public class TasksActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public Cursor getAllTasks() {
-        return mDb.query(
-                TaskListContract.TaskListEntry.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                TaskListContract.TaskListEntry.COLUMN_TIMESTAMP
-        );
     }
 }
