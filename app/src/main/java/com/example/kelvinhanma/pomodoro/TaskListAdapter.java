@@ -8,9 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.kelvinhanma.pomodoro.data.DataUtils;
 import com.example.kelvinhanma.pomodoro.data.TaskListContract;
 
 import org.w3c.dom.Text;
+
+import java.sql.Time;
+import java.sql.Timestamp;
 
 /**
  * Created by kelvinhanma on 12/28/16.
@@ -42,6 +46,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         int pomos = mCursor.getInt(mCursor.getColumnIndex(TaskListContract.TaskListEntry.COLUMN_POMOS));
         holder.pomosTextView.setText(String.valueOf(pomos));
 
+        Timestamp timestamp = Timestamp.valueOf(mCursor.getString(mCursor.getColumnIndex(TaskListContract.TaskListEntry.COLUMN_TIMESTAMP)));
+        holder.dateTextView.setText("(" + DataUtils.formatTimestamp(timestamp) + ")");
         holder.itemView.setTag(mCursor.getLong(mCursor.getColumnIndex(TaskListContract.TaskListEntry._ID)));
     }
 
@@ -59,12 +65,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     }
 
     class TaskViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTextView, pomosTextView;
+        TextView nameTextView, pomosTextView, dateTextView;
 
         public TaskViewHolder(View itemView) {
             super(itemView);
             nameTextView = (TextView) itemView.findViewById(R.id.tv_name);
             pomosTextView = (TextView) itemView.findViewById(R.id.tv_pomos);
+            dateTextView = (TextView) itemView.findViewById(R.id.tv_task_date);
         }
     }
 }
