@@ -48,6 +48,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         return mCursor.getCount();
     }
 
+    public void swapCursor(Cursor cursor) {
+        mCursor = cursor;
+    }
+
     class TaskViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView, pomosTextView;
 
