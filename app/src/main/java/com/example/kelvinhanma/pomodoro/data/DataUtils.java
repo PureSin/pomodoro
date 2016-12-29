@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,8 @@ import java.util.List;
  */
 
 public class DataUtils {
+    public static final SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
+
     public static void addTasks(SQLiteDatabase db) {
         if(db == null){
             return;
@@ -63,5 +67,9 @@ public class DataUtils {
         {
             db.endTransaction();
         }
+    }
+
+    public static String formatTimestamp(Timestamp ts) {
+        return FORMATTER.format(ts);
     }
 }
