@@ -41,6 +41,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
 
         int pomos = mCursor.getInt(mCursor.getColumnIndex(TaskListContract.TaskListEntry.COLUMN_POMOS));
         holder.pomosTextView.setText(String.valueOf(pomos));
+
+        holder.itemView.setTag(mCursor.getLong(mCursor.getColumnIndex(TaskListContract.TaskListEntry._ID)));
     }
 
     @Override

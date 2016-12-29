@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ public class TasksActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_tasks, container, false);
+        Activity activity = getActivity();
 
         mTaskNameEditText = (EditText) rootView.findViewById(R.id.task_edit_text);
         mTaskNameEditText.setOnClickListener(new View.OnClickListener() {
@@ -41,18 +43,36 @@ public class TasksActivityFragment extends Fragment {
             }
         });
 
-        Activity activity = getActivity();
         RecyclerView taskListRecyclerView = (RecyclerView) rootView.findViewById(R.id.content_tasks);
         taskListRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
         PomoDbHelper dbHelper = new PomoDbHelper(activity);
         mDb = dbHelper.getWritableDatabase();
-
         Cursor cursor = getAllTasks();
         mAdapter = new TaskListAdapter(activity, cursor);
 
         taskListRecyclerView.setAdapter(mAdapter);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false; //TODO handle reordering
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                long id = (long) viewHolder.itemView.getTag();
+                if (removeTask(id)) {
+                    mAdapter.swapCursor(getAllTasks());
+                }
+            }
+        }).attachToRecyclerView(taskListRecyclerView);
         return rootView;
+    }
+
+    private boolean removeTask(long id) {
+        return mDb.delete(TaskListContract.TaskListEntry.TABLE_NAME, TaskListContract.TaskListEntry._ID + "=" + id, null) > 0;
     }
 
     private long addTask(String taskName) {
