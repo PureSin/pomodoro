@@ -2,6 +2,7 @@ package com.example.kelvinhanma.pomodoro;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
@@ -22,7 +23,9 @@ import com.example.kelvinhanma.pomodoro.data.TaskListContract;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class TasksActivityFragment extends Fragment {
+public class TasksActivityFragment extends Fragment implements TaskListAdapter.ListItemClickListener {
+    public static final String TASK_ID = "task_id";
+
     private Activity mActivity;
     private TaskListAdapter mAdapter;
     private SQLiteDatabase mDb;
@@ -66,7 +69,7 @@ public class TasksActivityFragment extends Fragment {
         PomoDbHelper dbHelper = new PomoDbHelper(activity);
         mDb = dbHelper.getWritableDatabase();
         Cursor cursor = getAllTasks();
-        mAdapter = new TaskListAdapter(activity, cursor);
+        mAdapter = new TaskListAdapter(activity, cursor, this);
 
         taskListRecyclerView.setAdapter(mAdapter);
 
@@ -122,5 +125,12 @@ public class TasksActivityFragment extends Fragment {
         addTask(taskName);
         mTaskNameEditText.clearFocus();;
         mTaskNameEditText.getText().clear();;
+    }
+
+    @Override
+    public void onListItemClick(long itemId) {
+        Intent intent = new Intent(getActivity(), PomoActivity.class);
+        intent.putExtra(TASK_ID, itemId);
+        startActivity(intent);
     }
 }

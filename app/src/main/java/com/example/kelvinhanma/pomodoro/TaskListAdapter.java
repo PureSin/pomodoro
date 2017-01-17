@@ -23,10 +23,16 @@ import java.sql.Timestamp;
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskViewHolder> {
     private Context mContext;
     private Cursor mCursor;
+    private ListItemClickListener mListItemClickListener;
 
-    public TaskListAdapter(Context context, Cursor cursor) {
+    public interface ListItemClickListener {
+        void onListItemClick(long clickedItemIndex);
+    }
+
+    public TaskListAdapter(Context context, Cursor cursor, ListItemClickListener listItemClickListener) {
         this.mContext = context;
         this.mCursor = cursor;
+        this.mListItemClickListener = listItemClickListener;
     }
 
     @Override
@@ -49,6 +55,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         Timestamp timestamp = Timestamp.valueOf(mCursor.getString(mCursor.getColumnIndex(TaskListContract.TaskListEntry.COLUMN_TIMESTAMP)));
         holder.dateTextView.setText("(" + DataUtils.formatTimestamp(timestamp) + ")");
         holder.itemView.setTag(mCursor.getLong(mCursor.getColumnIndex(TaskListContract.TaskListEntry._ID)));
+
     }
 
     @Override
@@ -64,7 +71,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         }
     }
 
-    class TaskViewHolder extends RecyclerView.ViewHolder {
+
+    class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView nameTextView, pomosTextView, dateTextView;
 
         public TaskViewHolder(View itemView) {
@@ -72,6 +80,14 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
             nameTextView = (TextView) itemView.findViewById(R.id.tv_name);
             pomosTextView = (TextView) itemView.findViewById(R.id.tv_pomos);
             dateTextView = (TextView) itemView.findViewById(R.id.tv_task_date);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int clickPosition = getAdapterPosition();
+            mCursor.moveToPosition(clickPosition);
+            mListItemClickListener.onListItemClick(mCursor.getLong(mCursor.getColumnIndex(TaskListContract.TaskListEntry._ID)));
         }
     }
 }
