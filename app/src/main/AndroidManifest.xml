@@ -21,7 +21,16 @@
         </activity>
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".TaskActivity"
+            android:label="@string/title_activity_task"
+            android:parentActivityName=".TasksActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.kelvinhanma.pomodoro.TasksActivity" />
+        </activity>
     </application>
 
 </manifest>

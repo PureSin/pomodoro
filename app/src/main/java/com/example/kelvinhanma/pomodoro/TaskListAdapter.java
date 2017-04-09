@@ -1,7 +1,9 @@
 package com.example.kelvinhanma.pomodoro;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import java.sql.Timestamp;
  */
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskViewHolder> {
+    public static final String TASK_ID = "TASK_ID";
     private Context mContext;
     private Cursor mCursor;
 
@@ -37,7 +40,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     }
 
     @Override
-    public void onBindViewHolder(TaskViewHolder holder, int position) {
+    public void onBindViewHolder(TaskViewHolder holder, final int position) {
         if (!mCursor.moveToPosition(position)) return;
 
         String name = mCursor.getString(mCursor.getColumnIndex(TaskListContract.TaskListEntry.COLUMN_TASK_NAME));
@@ -49,6 +52,15 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         Timestamp timestamp = Timestamp.valueOf(mCursor.getString(mCursor.getColumnIndex(TaskListContract.TaskListEntry.COLUMN_TIMESTAMP)));
         holder.dateTextView.setText("(" + DataUtils.formatTimestamp(timestamp) + ")");
         holder.itemView.setTag(mCursor.getLong(mCursor.getColumnIndex(TaskListContract.TaskListEntry._ID)));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(mContext, TaskActivity.class);
+                i.putExtra(TASK_ID, mCursor.getInt(mCursor.getColumnIndex(TaskListContract.TaskListEntry._ID)));
+                mContext.startActivity(i); //TODO figure out how to implement in api 15
+            }
+        });
     }
 
     @Override
