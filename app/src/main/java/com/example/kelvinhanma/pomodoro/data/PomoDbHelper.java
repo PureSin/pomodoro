@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by kelvinhanma on 12/29/16.
  */
-
+// TODO run db queries on background thread
 public class PomoDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "pomo.db";
 

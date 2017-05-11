@@ -23,6 +23,7 @@ public class TaskActivity extends AppCompatActivity {
     private TextView mTimeTextView;
     private CountDownTimer mTimer;
     private Button mTimerButton;
+    private Button mCompleteButton;
     private long savedTime;
     private boolean stopped = false;
 
@@ -56,12 +57,23 @@ public class TaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!stopped) {
+                    mTimerButton.setText(R.string.timer_resume);
                     mTimer.cancel();
                 } else {
+                    mTimerButton.setText(R.string.timer_pause);
                     mTimer = createTimer(savedTime);
                     mTimer.start();
                 }
+                stopped = !stopped;
+            }
+        });
 
+        mCompleteButton = (Button) findViewById(R.id.completeButton);
+        mCompleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO mark finish
+                finish();
             }
         });
     }

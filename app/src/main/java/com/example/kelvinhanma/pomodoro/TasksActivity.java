@@ -45,7 +45,7 @@ public class TasksActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             Intent i = new Intent(this, SettingsActivity.class);
             startActivity(i);
-            return true; //TODO settings activity
+            return true; //RTODO settings activity
         }
 
         return super.onOptionsItemSelected(item);
