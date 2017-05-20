@@ -27,16 +27,15 @@ import butterknife.OnClick;
  * A placeholder fragment containing a simple view.
  */
 public class TasksActivityFragment extends Fragment {
-    private Activity mActivity;
-    private TaskListAdapter mAdapter;
-    private SQLiteDatabase mDb;
-
     @BindView(R.id.task_edit_text)
     EditText mTaskNameEditText;
     @BindView(R.id.add_task_button)
     Button mAddButton;
     @BindView(R.id.content_tasks)
     RecyclerView mTaskListRecyclerView;
+    private Activity mActivity;
+    private TaskListAdapter mAdapter;
+    private SQLiteDatabase mDb;
 
     public TasksActivityFragment() {
     }
@@ -46,7 +45,7 @@ public class TasksActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_tasks, container, false);
         Activity activity = getActivity();
-        ButterKnife.bind(getActivity());
+        ButterKnife.bind(this, rootView);
 
         mTaskNameEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
