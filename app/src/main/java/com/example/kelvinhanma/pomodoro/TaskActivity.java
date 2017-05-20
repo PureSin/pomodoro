@@ -16,16 +16,22 @@ import com.example.kelvinhanma.pomodoro.data.TaskListContract;
 
 import java.util.concurrent.TimeUnit;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class TaskActivity extends AppCompatActivity {
-    private static long INIT_DURATION = TimeUnit.MINUTES.toMillis(25);
     private static final String format = "MM:ss";
+    private static long INIT_DURATION = TimeUnit.MINUTES.toMillis(25);
+    @BindView(R.id.timerView)
+    TextView mTimeTextView;
+    @BindView(R.id.timerButton)
+    Button mTimerButton;
+    @BindView(R.id.completeButton)
+    Button mCompleteButton;
     private SQLiteDatabase mDb;
-    private TextView mTimeTextView;
-    private CountDownTimer mTimer;
-    private Button mTimerButton;
-    private Button mCompleteButton;
     private long savedTime;
     private boolean stopped = false;
+    private CountDownTimer mTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,7 @@ public class TaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         int id = intent.getIntExtra(TaskListAdapter.TASK_ID, -1);
@@ -48,11 +55,9 @@ public class TaskActivity extends AppCompatActivity {
         setTitle(cursor.getString(cursor.getColumnIndex(TaskListContract.TaskListEntry.COLUMN_TASK_NAME)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mTimeTextView = (TextView) findViewById(R.id.timerView);
         mTimer = createTimer(INIT_DURATION);
         mTimer.start();
 
-        mTimerButton = (Button) findViewById(R.id.timerButton);
         mTimerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +73,6 @@ public class TaskActivity extends AppCompatActivity {
             }
         });
 
-        mCompleteButton = (Button) findViewById(R.id.completeButton);
         mCompleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
